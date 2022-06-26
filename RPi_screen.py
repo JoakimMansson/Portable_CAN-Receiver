@@ -12,39 +12,52 @@ class test(Tk):
         self.geometry("500x500")
         self.resizable(False,False)
         self.title("CAN debugger")
+        self.img = ImageTk.PhotoImage(Image.open(("HUST_logo.png")).resize((100, 100)))
 
-        self.canvas = Canvas(self, width=500,height=500)
+        self.receive_canvas = Canvas(self, width=500,height=500)
+        self.send_canvas = Canvas(self, width=500, height=500)
 
-        self.frame = Frame(self.canvas, width=500, height=500)
-        self.frame.pack()
-        self.frame.place(anchor="center", relx=0.5, rely=0.15)
 
-        #Logo
-        self.img = ImageTk.PhotoImage(Image.open(("HUST_logo.png")).resize((100,100)))
+    def receive_screen(self):
+        #self.send_canvas.delete("all")
+        #self.
 
-        #Adding logo to a label which is added to the frame
-        label = Label(self.frame, image=self.img)
-        label.pack()
+        self.receive_canvas.create_image(250, 100, image=self.img)
 
-    def testing(self):
-        self.canvas.create_text(250,200, text="Receiving CAN", fill="black", font=("Arial",25))
+        send_btn = Button(self, text="Send CAN", command=lambda: self.send_screen())
+        send_btn.pack(side=BOTTOM, padx=10, pady=10)
+
+        self.receive_canvas.create_text(250,200, text="Receiving CAN", fill="black", font=("Arial",25))
 
         #BMS
-        self.canvas.create_text(125, 275, text="pack current:", font=("Arial", 15))
-        self.canvas.create_text(125, 325, text="pack voltage:", font=("Arial", 15))
-        self.canvas.create_text(125, 375, text="temp BMS:", font=("Arial", 15))
-        self.canvas.create_text(125, 425, text="cell voltage:", font=("Arial", 15))
+        self.receive_canvas.create_text(125, 275, text="pack current:", font=("Arial", 15))
+        self.receive_canvas.create_text(125, 325, text="pack voltage:", font=("Arial", 15))
+        self.receive_canvas.create_text(125, 375, text="temp BMS:", font=("Arial", 15))
+        self.receive_canvas.create_text(125, 425, text="cell voltage:", font=("Arial", 15))
 
         #MC
-        self.canvas.create_text(350, 275, text="velocity ms:", font=("Arial", 15))
-        self.canvas.create_text(350, 325, text="velocity rpm:", font=("Arial", 15))
-        self.canvas.create_text(350, 375, text="heatsink temp", font=("Arial", 15))
-        self.canvas.create_text(350, 425, text="motor temp:", font=("Arial", 15))
+        self.receive_canvas.create_text(350, 275, text="velocity ms:", font=("Arial", 15))
+        self.receive_canvas.create_text(350, 325, text="velocity rpm:", font=("Arial", 15))
+        self.receive_canvas.create_text(350, 375, text="heatsink temp", font=("Arial", 15))
+        self.receive_canvas.create_text(350, 425, text="motor temp:", font=("Arial", 15))
 
-        self.canvas.pack()
+        self.receive_canvas.pack()
+
+
+    def send_screen(self):
+        #self.receive_canvas.delete("all")
+
+        self.send_canvas.create_image(250, 100, image=self.img)
+
+        #send_btn = Button(self, text="Receive CAN", command=lambda: self.receive_screen())
+       # send_btn.pack(side=BOTTOM, padx=10, pady=10)
+
+        self.send_canvas.create_text(250,200, text="Sending CAN", fill="black", font=("Arial",25))
+
+        #self.send_canvas.pack()
 
 
 if __name__ == "__main__":
     t = test()
-    t.testing()
+    t.receive_screen()
     t.mainloop()
