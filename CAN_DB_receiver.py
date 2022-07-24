@@ -22,12 +22,11 @@ motor_velocity, vehicle_velocity = 0, 0
 
 def update_value():
     global bus_voltage, bus_current, heat_sink_temp, motor_temp, motor_velocity, vehicle_velocity
-    bus_voltage, bus_current = db.get_element(0, "bus_voltage"), db.get_element(0, "bus_current")
+    #bus_voltage, bus_current = db.get_element(0, "bus_voltage"), db.get_element(0, "bus_current")
     heat_sink_temp, motor_temp = db.get_element(0, "heat_sink_temp"), db.get_element(0, "motor_temp")
     motor_velocity, vehicle_velocity = db.get_element(0, "motor_velocity"), db.get_element(0, "vehicle_velocity")
     current_time = time.time()
 
-    #ax.cla()
     #VV_ax.cla()
 
     MV_ax.plot(current_time-start_time, motor_velocity)
