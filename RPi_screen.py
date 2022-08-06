@@ -1,12 +1,14 @@
 import tkinter
 import re
 import linecache
+import time
 
 from threading import Thread
 from Database import database
 from tkinter import *
 from tkinter.ttk import Panedwindow
 
+from excel_automation import ExcelAutomation
 from PIL import Image, ImageTk
 
 #   Adda slider för att kontroller motorhastighet
@@ -19,12 +21,18 @@ dataB = re.sub("\n", "", linecache.getline("confidential", 6))
 
 db = database(cluster, collection, dataB)
 
-
-
+"""
+Lägg till flera data_sets om du lägger till fler rader
+i excel
+"""
+excel = ExcelAutomation("excel_blad.xlsx")
 class Receive_GUI(Tk):
 
     def __init__(self):
         super().__init__()
+        self.script_start_time = time.time()
+
+
         # Fetching MC values
         self.bus_voltage_db, self.bus_current_db = 0, 0
         self.heat_sink_temp_db, self.motor_temp_db = 0, 0
@@ -107,6 +115,7 @@ class Receive_GUI(Tk):
     def exitScreen(self):
         self.destroy()
 
+
     def switchScreen(self, to_frame_send: bool) -> None:
         if to_frame_send:
             self.receive_frame.pack_forget()
@@ -117,6 +126,7 @@ class Receive_GUI(Tk):
             self.receive_screen()
             print("switching to receive frame")
 
+
     def update_main_screen(self):
 
         self.vehicle_velocity["text"] = "Vehicle velocity: " + str(round(self.vehicle_velocity_db, 2))
@@ -126,6 +136,7 @@ class Receive_GUI(Tk):
         self.acceleration["text"] = "Acceleration: " + str(round(self.acceleration_db, 2))
         self.motor_efficiency["text"] = "Motor efficiency: " + str(round(self.motor_efficiency_db, 2))
 
+
     def update_CAN_values(self):
         update_thread = Thread(target=self.update_CAN_values)
 
@@ -134,11 +145,25 @@ class Receive_GUI(Tk):
         self.motor_velocity_db, self.vehicle_velocity_db = db.get_element(0, "motor_velocity"), db.get_element(0, "vehicle_velocity")
         self.acceleration_db, self.motor_efficiency_db = db.get_element(0, "acceleration"), db.get_element(0, "motor_efficiency")
 
+        self.update_excel_sheet_MC()
+
         if self.in_main_screen:
             self.update_main_screen()
 
         update_thread.start()
 
+
+    def update_excel_sheet_MC(self):
+        current_time = time.time() - self.script_start_time
+        excel.update_multiple_cells([current_time,
+                                     self.bus_current_db,
+                                     self.bus_voltage_db,
+                                     self.motor_efficiency_db,
+                                     self.heat_sink_temp_db,
+                                     self.motor_temp_db,
+                                     self.motor_velocity_db,
+                                     self.vehicle_velocity_db,
+                                     self.acceleration_db])
 
 if __name__ == "__main__":
     receive_can = Receive_GUI()
