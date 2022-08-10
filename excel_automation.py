@@ -26,7 +26,6 @@ class ExcelAutomation:
                 break
             else:
                 self.ws[char + str(new_row)].value = new_data[counter]
-                print(self.ws[char + str(new_row)].value)
                 counter = counter + 1
         self.wb.save(self.excel_name)
 

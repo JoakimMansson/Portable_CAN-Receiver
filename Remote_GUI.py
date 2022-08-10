@@ -25,7 +25,7 @@ db = database(cluster, collection, dataB)
 Lägg till flera data_sets om du lägger till fler rader
 i excel
 """
-excel = ExcelAutomation("excel_blad.xlsx")
+#excel = ExcelAutomation("excel_blad.xlsx")
 class Receive_GUI(Tk):
 
     def __init__(self):
@@ -38,6 +38,11 @@ class Receive_GUI(Tk):
         self.heat_sink_temp_db, self.motor_temp_db = 0, 0
         self.motor_velocity_db, self.vehicle_velocity_db = 0, 0
         self.acceleration_db, self.motor_efficiency_db = 0, 0
+
+        # Fetching BMS values
+        self.pack_current_db, self.pack_voltage_db = 0, 0
+        self.temp_BMS_db, self.cell_voltage_db = 0, 0
+
 
         #Setting dimensions and resizability
         #self.attributes('-fullscreen', True)
@@ -52,7 +57,6 @@ class Receive_GUI(Tk):
 
 
     def receive_screen(self) -> None:
-
         self.in_main_screen = True
 
         logo = Label(self.receive_frame, image=self.img)
@@ -62,35 +66,35 @@ class Receive_GUI(Tk):
         receiving_can.place(relx=0.5, rely=0.3, anchor="center")
 
         # BMS
-        pack_current = Label(self.receive_frame, text="pack current:", font=("Arial", 15))
-        pack_current.place(relx=0.15, rely=0.45, anchor="center")
+        self.pack_current = Label(self.receive_frame, text="Pack current:", font=("Arial", 15))
+        self.pack_current.place(relx=0.15, rely=0.45, anchor="center")
 
-        pack_voltage = Label(self.receive_frame, text="pack voltage:", font=("Arial", 15))
-        pack_voltage.place(relx=0.15, rely=0.57, anchor="center")
+        self.pack_voltage = Label(self.receive_frame, text="Pack voltage:", font=("Arial", 15))
+        self.pack_voltage.place(relx=0.15, rely=0.57, anchor="center")
 
-        temp_BMS = Label(self.receive_frame, text="temp BMS:", font=("Arial", 15))
-        temp_BMS.place(relx=0.15, rely=0.69, anchor="center")
+        self.temp_BMS = Label(self.receive_frame, text="Temp BMS:", font=("Arial", 15))
+        self.temp_BMS.place(relx=0.35, rely=0.45, anchor="center")
 
-        cell_voltage = Label(self.receive_frame, text="cell voltage:", font=("Arial", 15))
-        cell_voltage.place(relx=0.15, rely=0.81, anchor="center")
+        self.cell_voltage = Label(self.receive_frame, text="Cell voltage:", font=("Arial", 15))
+        self.cell_voltage.place(relx=0.35, rely=0.57, anchor="center")
 
         # MC
-        self.vehicle_velocity = Label(self.receive_frame, text="vehicle velocity:", font=("Arial", 15))
+        self.vehicle_velocity = Label(self.receive_frame, text="Vehicle velocity:", font=("Arial", 15))
         self.vehicle_velocity.place(relx=0.6, rely=0.45, anchor="center")
 
-        self.motor_velocity = Label(self.receive_frame, text="motor velocity:" + str(self.motor_velocity_db), font=("Arial", 15))
+        self.motor_velocity = Label(self.receive_frame, text="Motor velocity:" + str(self.motor_velocity_db), font=("Arial", 15))
         self.motor_velocity.place(relx=0.6, rely=0.57, anchor="center")
 
-        self.acceleration = Label(self.receive_frame, text="acceleration:", font=("Arial", 15))
+        self.acceleration = Label(self.receive_frame, text="Acceleration:", font=("Arial", 15))
         self.acceleration.place(relx=0.6, rely=0.69, anchor="center")
 
-        self.heatsink_temp = Label(self.receive_frame, text="heatsink temp:", font=("Arial", 15))
+        self.heatsink_temp = Label(self.receive_frame, text="Heatsink temp:", font=("Arial", 15))
         self.heatsink_temp.place(relx=0.85, rely=0.45, anchor="center")
 
-        self.motor_temp = Label(self.receive_frame, text="motor temp: " + str(self.motor_temp_db), font=("Arial", 15))
+        self.motor_temp = Label(self.receive_frame, text="Motor temp: " + str(self.motor_temp_db), font=("Arial", 15))
         self.motor_temp.place(relx=0.85, rely=0.57, anchor="center")
 
-        self.motor_efficiency = Label(self.receive_frame, text="motor efficiency:", font=("Arial", 15))
+        self.motor_efficiency = Label(self.receive_frame, text="Motor efficiency:", font=("Arial", 15))
         self.motor_efficiency.place(relx=0.85, rely=0.69, anchor="center")
 
         self.receive_frame.pack()
@@ -145,7 +149,10 @@ class Receive_GUI(Tk):
         self.motor_velocity_db, self.vehicle_velocity_db = db.get_element(0, "motor_velocity"), db.get_element(0, "vehicle_velocity")
         self.acceleration_db, self.motor_efficiency_db = db.get_element(0, "acceleration"), db.get_element(0, "motor_efficiency")
 
-        self.update_excel_sheet_MC()
+        self.pack_current_db, self.pack_voltage_db = 0, 0
+        self.temp_BMS_db, self.cell_voltage_db = 0, 0
+
+        #self.update_excel_sheet_MC()
 
         if self.in_main_screen:
             self.update_main_screen()
@@ -154,6 +161,7 @@ class Receive_GUI(Tk):
 
 
     def update_excel_sheet_MC(self):
+        """
         current_time = time.time() - self.script_start_time
         excel.update_multiple_cells([current_time,
                                      self.bus_current_db,
@@ -164,6 +172,12 @@ class Receive_GUI(Tk):
                                      self.motor_velocity_db,
                                      self.vehicle_velocity_db,
                                      self.acceleration_db])
+        """
+        pass
+
+
+    def update_excel_sheet_BMS(self):
+        pass
 
 if __name__ == "__main__":
     receive_can = Receive_GUI()
