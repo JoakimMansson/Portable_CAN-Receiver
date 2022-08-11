@@ -11,10 +11,47 @@ WindowManager:
 
 <MainScreen>:
     name: "Main"
+    current_status: current_status
+    reverseB: reverse
+    neutralB: neutral
+    driveB: drive
 
     MDFloatLayout:
         size: root.width, root.height
         md_bg_color: (10/255, 10/255, 10/255, 0)
+
+
+        MDIconButton:
+            id:reverse
+            icon: "alpha-r"
+            user_font_size: "60sp"
+            pos_hint: {"center_x": 0.35, "center_y": 0.1}
+            on_press:
+                root.reverse()
+
+        MDIconButton:
+            id:neutral
+            icon: "alpha-n"
+            user_font_size: "60"
+            pos_hint: {"center_x": 0.5, "center_y": 0.1}
+            on_press:
+                root.neutral()
+
+        MDIconButton:
+            id:drive
+            icon: "alpha-d"
+            user_font_size: "60sp"
+            pos_hint: {"center_x": 0.65, "center_y": 0.1}
+            on_press:
+                root.drive()
+
+        MDLabel:
+            id: current_status
+            font_size: "50sp"
+            text: "Neutral"
+            font_name: "comic"
+            pos_hint: {"center_x": 0.92, "center_y": 0.85}
+
 
 
 

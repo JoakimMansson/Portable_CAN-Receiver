@@ -53,7 +53,7 @@ class Gauge(Widget):
 
         _img_gauge = Image(
             source=self.file_gauge,
-            size=(1350,600)
+            size=(1350, 600)
 
         )
 
@@ -69,8 +69,7 @@ class Gauge(Widget):
             size=(self.size_gauge, self.size_gauge)
         )
 
-        self._glab = Label(font_size=self.size_text, markup=True)
-        self._progress = ProgressBar(max=100, height=20, value=self.value , size=(500,400))
+        self._glab = Label(font_size=self.size_text, markup=True, color=(0, 0, 0, 1))
 
         self._gauge.add_widget(_img_gauge)
         self._needle.add_widget(_img_needle)
@@ -78,8 +77,6 @@ class Gauge(Widget):
         self.add_widget(self._gauge)
         self.add_widget(self._needle)
         self.add_widget(self._glab)
-        self.add_widget(self._progress)
-
         self.bind(pos=self._update)
         self.bind(size=self._update)
         self.bind(value=self._turn)
@@ -93,9 +90,6 @@ class Gauge(Widget):
         self._needle.center = self._gauge.center
         self._glab.center_x = self._gauge.center_x
         self._glab.center_y = self._gauge.center_y + (self.size_gauge / 4)
-        self._progress.x = self._gauge.x + (self.size_gauge/0.468 )
-        self._progress.y = self._gauge.y + (self.size_gauge/4 )
-        self._progress.width = self.size_gauge
 
     def _turn(self, *args):
         '''
@@ -105,7 +99,6 @@ class Gauge(Widget):
         self._needle.center_y = self._gauge.center_y
         self._needle.rotation = (50 * self.unit) - (self.value * self.unit)
         self._glab.text = "[b]{0:.0f}[/b]".format(self.value)
-        self._progress.value = self.value
 
 
 class StartScreen(Screen):
@@ -120,15 +113,42 @@ class StartScreen(Screen):
 
 
 class MainScreen(Screen):
+    neutralB = ObjectProperty(None)
+    reverseB = ObjectProperty(None)
+    driveB = ObjectProperty(None)
+    current_status = ObjectProperty(None)
 
     def __init__(self, **kw):
         super().__init__(**kw)
-        self.gauge = Gauge(value=50, size_gauge=256, size_text=50, pos_hint={"center_x": 0.18, "center_y": 0.1})
+        self.gauge = Gauge(value=50,
+                           size_gauge=1000,
+                           size_text=50,
+                           pos_hint={"center_x": 0.18, "center_y": 0.3}
+                           )
         self.add_widget(self.gauge)
 
 
     def set_current_velocity(self, velocity):
         self.gauge.value = velocity
+
+
+    def reverse(self):
+        self.reverseB.disabled = True
+        self.driveB.disabled = False
+        self.neutralB.disabled = False
+        self.current_status.text = "Reverse"
+
+    def drive(self):
+        self.driveB.disabled = True
+        self.reverseB.disabled = False
+        self.neutralB.disabled = False
+        self.current_status.text = "Drive"
+
+    def neutral(self):
+        self.neutralB.disabled = True
+        self.driveB.disabled = False
+        self.reverseB.disabled = False
+        self.current_status.text = "Neutral"
 
 
 class WindowManager(ScreenManager):
