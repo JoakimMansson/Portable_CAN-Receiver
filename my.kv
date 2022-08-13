@@ -1,60 +1,106 @@
 WindowManager:
 
-    StartScreen:
     MainScreen:
 
-<StartScreen>:
-    name: "Start"
-
-    MDFloatLayout:
-        md_bg_color: (245/255, 245/255, 245/255, 1)
 
 <MainScreen>:
     name: "Main"
-    current_status: current_status
     reverseB: reverse
     neutralB: neutral
     driveB: drive
+    current_speed:current_speed
+
+    bms_temp_img:bms_temp
+    motor_temp_img:motor_temp
 
     MDFloatLayout:
         size: root.width, root.height
-        md_bg_color: (10/255, 10/255, 10/255, 0)
+        md_bg_color: (0,0,0,1)
 
-
-        MDIconButton:
+        MDRoundFlatButton:
             id:reverse
-            icon: "alpha-r"
-            user_font_size: "60sp"
-            pos_hint: {"center_x": 0.35, "center_y": 0.1}
+            text:"R"
+            user_font_size: "80sp"
+            line_color:(1,1,1,1)
+            text_color:(1,1,1,1)
+            font_size: "40sp"
+            pos_hint: {"center_x": 0.35, "center_y": 0.13}
             on_press:
                 root.reverse()
 
-        MDIconButton:
+        MDRoundFlatButton:
             id:neutral
-            icon: "alpha-n"
-            user_font_size: "60"
-            pos_hint: {"center_x": 0.5, "center_y": 0.1}
+            text:"N"
+            user_font_size: "80sp"
+            line_color:(0/255,109/255,176/255,1)
+            text_color:(0/255,109/255,176/255,1)
+            font_size: "40sp"
+            pos_hint: {"center_x": 0.5, "center_y": 0.13}
             on_press:
                 root.neutral()
 
-        MDIconButton:
+        MDRoundFlatButton:
             id:drive
-            icon: "alpha-d"
-            user_font_size: "60sp"
-            pos_hint: {"center_x": 0.65, "center_y": 0.1}
+            text:"D"
+            user_font_size: "80sp"
+            line_color:(1,1,1,1)
+            text_color:(1,1,1,1)
+            font_size: "40sp"
+            pos_hint: {"center_x": 0.65, "center_y": 0.13}
             on_press:
                 root.drive()
 
-        MDLabel:
-            id: current_status
-            font_size: "50sp"
-            text: "Neutral"
-            font_name: "comic"
-            pos_hint: {"center_x": 0.92, "center_y": 0.85}
+        Label:
+            id: current_speed
+            text: "50"
+            color: (1,1,1,1)
+            font_size: "120sp"
+            pos_hint: {"center_x": 0.5, "center_y": 0.5}
 
+        Label:
+            text: "Temperatures"
+            color: (1,1,1,1)
+            font_size: "28sp"
+            pos_hint: {"center_x": 0.13, "center_y": 0.95}
 
+        Label:
+            text: "BMS"
+            color: (1,1,1,1)
+            font_size: "20sp"
+            pos_hint: {"center_x": 0.06, "center_y": 0.88}
 
+        Image:
+            id:bms_temp
+            source:"temp_images/green.png"
+            width: "10sp"
+            size_hint_y: 0.05
+            pos_hint: {"center_x": 0.12, "center_y": 0.88}
 
+        Label:
+            text: "Motor"
+            color: (1,1,1,1)
+            font_size: "20sp"
+            pos_hint: {"center_x": 0.065, "center_y": 0.83}
+
+        Image:
+            id:motor_temp
+            source:"temp_images/green.png"
+            width: "10sp"
+            size_hint_y: 0.05
+            pos_hint: {"center_x": 0.13, "center_y": 0.83}
+
+        Label:
+            text: "Heat-sink"
+            color: (1,1,1,1)
+            font_size: "20sp"
+            pos_hint: {"center_x": 0.085, "center_y": 0.78}
+
+        Image:
+            id:heat_sink_temp
+            source:"temp_images/green.png"
+            width: "10sp"
+            size_hint_y: 0.05
+            pos_hint: {"center_x": 0.163, "center_y": 0.78}
 
 
 
